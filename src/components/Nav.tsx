@@ -25,9 +25,11 @@ export default function Nav() {
       <ul class="container flex items-center p-3 text-gray-200">
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
+        <NavLink href="/roster">Roster</NavLink>
         
         {/*{!isLoggedIn() && <NavLink href="/login">Login</NavLink>}*/}
         <NavLink href="/login">Login</NavLink>
+
 
 
 
