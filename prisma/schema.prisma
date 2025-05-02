@@ -15,12 +15,12 @@ model User {
   id       String @id @default(uuid())
   username String @unique
   password String
-  roster   roster[]
-  equipment equipment[]
+  roster   Roster[]
+  equipment Equipment[]
 
 }
 
-model roster{
+model Roster{
   id       String @id @default(uuid())
   name     String
   userId   String
@@ -29,7 +29,7 @@ model roster{
   user     User   @relation(fields: [userId], references: [id])
 }
 
-model equipment{
+model Equipment{
   id       String @id @default(uuid())
   name     String
   data     Json
@@ -37,7 +37,7 @@ model equipment{
   user     User   @relation(fields: [userId], references: [id])
 }
 
-model initRoster{
+model InitRoster{
   id       String @id @default(uuid())
   name     String
   dataRoster     Json
