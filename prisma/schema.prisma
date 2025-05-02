@@ -24,14 +24,22 @@ model roster{
   id       String @id @default(uuid())
   name     String
   userId   String
-  data     Json
+  dataRoster     Json
+  dataVisual    Json
   user     User   @relation(fields: [userId], references: [id])
 }
 
 model equipment{
   id       String @id @default(uuid())
   name     String
-  data    Json
+  data     Json
   userId   String
   user     User   @relation(fields: [userId], references: [id])
+}
+
+model initRoster{
+  id       String @id @default(uuid())
+  name     String
+  dataRoster     Json
+  dataVisual    Json
 }
