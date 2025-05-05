@@ -1,5 +1,5 @@
 import { createSignal, createResource, For, Show } from 'solid-js';
-import { getRosters, getRosterById } from '../lib/rosterAPI';
+import { getRosters, getRosterById } from '../lib/rosterApi';
 import PlayerDetailComponent from './PlayerDetailComponent';
 import type { PlayerData } from '../types';
 import { getPositionName } from '../lib/utils';

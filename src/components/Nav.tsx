@@ -26,7 +26,8 @@ export default function Nav() {
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
         <NavLink href="/roster">Roster</NavLink>
-        
+        <NavLink href="/initRoster">Init Roster</NavLink>  
+        <NavLink href="/rosters/myRosters">my Roster</NavLink>      
         {/*{!isLoggedIn() && <NavLink href="/login">Login</NavLink>}*/}
         <NavLink href="/login">Login</NavLink>
 
