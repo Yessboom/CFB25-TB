@@ -136,3 +136,35 @@ export const getUserRosterById = query(async (id: string) => {
   }
   return roster.dataRoster as RosterData;
 }, "userRoster");
+
+export const updateRoster = action(async ([id, data]: [string, RosterData]) => {
+  "use server";
+  try {
+    const session = await getSession();
+    if (!session.data.userId) {
+      throw new Error("Not authenticated");
+    }
+    if (!id) {
+      throw new Error("Roster ID is required");
+    }
+
+    // Log the data being updated for debugging purposes
+    console.log("Updating roster with ID:", id);
+    console.log("Data to update:", JSON.stringify(data, null, 2));
+
+    const roster = await PlayerDB.roster.update({
+      where: { id },
+      data: { dataRoster: data },
+    });
+
+    // Log the updated roster for debugging purposes
+    console.log("Updated roster:", roster);
+
+    return roster;
+  } catch (error) {
+    console.error("Error in updateRoster function:", error);
+    throw error;
+  }
+  
+}, 
+"updateRoster");
