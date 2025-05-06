@@ -61,6 +61,6 @@ export function formatWeight(weight: string | undefined): string {
     const weightNum = parseInt(weight, 10);
     if (isNaN(weightNum)) return weight;
     
-    const kg = Math.round(weightNum * 0.453592);
+    const kg = Math.round((160+weightNum) * 0.453592);
     return `${kg} kg`;
   }

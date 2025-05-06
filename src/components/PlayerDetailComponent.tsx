@@ -1,6 +1,6 @@
 import {createSignal, createEffect, createMemo, Show, For, createResource} from "solid-js";
 import type { PlayerData, AttributeDefinition } from "../types";
-import { getPositionName, formatDevTrait, formatHeight } from "../lib/utils";
+import { getPositionName, formatDevTrait, formatHeight, formatWeight } from "../lib/utils";
 import { attributeGroups } from "~/lib/attributeGroups";
 import { getPortraitThumbnail } from "~/lib/rosterApi";
 
@@ -138,6 +138,68 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
             )}
           </div>
         </div>
+
+        {/* Height & Weight sliders */}
+        <div class="flex space-x-8 mb-4">
+          {/* Height */}
+          <div class="flex flex-col">
+            <label class="text-gray-600 text-sm">
+              Height: {formatHeight(props.player?.PLYR_HEIGHT)}
+            </label>
+            <input
+              type="range"
+              min="00"
+              max="100"
+              value={props.player?.PLYR_HEIGHT ?? 0}
+              onInput={e =>
+                props.onFieldChange!(
+                  "PLYR_HEIGHT",
+                  e.currentTarget.value
+                )
+              }
+            />
+          </div>
+          {/* Weight */}
+          <div class="flex flex-col">
+            <label class="text-gray-600 text-sm">
+              Weight: {formatWeight(props.player?.PLYR_WEIGHT)}
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="250"
+              value={props.player?.PLYR_WEIGHT ?? 0}
+              onInput={e =>
+                props.onFieldChange!(
+                  "PLYR_WEIGHT",
+                  e.currentTarget.value
+                )
+              }
+            />
+          </div>
+          {/*Impact Player*/}
+          <div class="flex flex-col items-start">
+            <label class="text-gray-600 text-sm mb-1">Superstar</label>
+            <button
+              type="button"
+              class={`text-2xl focus:outline-none ${
+                props.player?.PLYR_IS_IMPACTPLAYER === "1"
+                  ? "text-yellow-400"
+                  : "text-gray-300"
+              } hover:text-yellow-500`}
+              onClick={() =>
+                props.onFieldChange!(
+                  "PLYR_IS_IMPACTPLAYER",
+                  props.player?.PLYR_IS_IMPACTPLAYER === "1" ? "0" : "1"
+                )
+              }
+            >
+              ★
+            </button>
+          </div>
+        </div>
+
+        {/* Dev Trait */}
 
         {/* Top‐level tabs */}
         <nav class="flex space-x-4 border-b mb-2">
