@@ -168,3 +168,20 @@ export const updateRoster = action(async ([id, data]: [string, RosterData]) => {
   
 }, 
 "updateRoster");
+
+export const getPortraitThumbnail = query(
+  async (genericId: number | string) => {
+    "use server"
+
+    const portraitId = String(genericId);
+    
+    // Find the portrait by genericid
+    const rec = await PlayerDB.portrait.findFirst({
+      where: { genericid: portraitId },
+      select: { thumbnaillink: true }
+    })
+    
+    return rec?.thumbnaillink ?? ''
+  },
+  "portraitThumbnail"
+)

@@ -78,3 +78,13 @@ export interface RosterEntry {
 
   // Type for a player with ID included (for selection purposes)
 export type PlayerWithId = PlayerData & { id: string };
+
+export interface PlayerPortrait {
+    id: string;
+    genericid: string;
+    recipe: string;
+    complexionid: string;
+    imagelink: string;
+    thumbnaillink: string;
+  }
+  

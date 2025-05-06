@@ -1,18 +1,14 @@
-import {
-  createSignal,
-  createEffect,
-  createMemo,
-  Show,
-  For
-} from "solid-js";
+import {createSignal, createEffect, createMemo, Show, For, createResource} from "solid-js";
 import type { PlayerData, AttributeDefinition } from "../types";
 import { getPositionName, formatDevTrait, formatHeight } from "../lib/utils";
 import { attributeGroups } from "~/lib/attributeGroups";
+import { getPortraitThumbnail } from "~/lib/rosterApi";
 
 interface PlayerDetailProps {
   player: PlayerData & { id: string } | null;
   editable?: boolean;
   onFieldChange?: (field: string, newValue: string) => void;
+  portrait?: string;
 }
 
 export default function PlayerDetailComponent(props: PlayerDetailProps) {
@@ -40,6 +36,16 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
   );
   const [selectedSubGroup, setSelectedSubGroup] = createSignal(
     subGroups()[0] || ""
+  );
+
+  // Modified to ensure we're passing the correct format for genericid
+  const [thumbUrl] = createResource(
+    () => {
+      const portraitId = props.player?.PLYR_PORTRAIT;
+      // Make sure we're passing a valid value to the resource
+      return portraitId ? String(portraitId) : undefined;
+    },
+    getPortraitThumbnail
   );
 
   // whenever category changes, reset sub‐group to first
@@ -107,13 +113,29 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
             </h2>
           )}
 
-          <div class="flex space-x-1">
-            <div class="px-2 py-1 bg-blue-100 text-blue-800 rounded font-semibold text-sm">
-              {getPositionName(props.player?.PLYR_POSITION || "")}
+          <div class="flex items-center space-x-1">
+            <div class="flex flex-col items-end">
+              <div class="px-2 py-1 bg-blue-100 text-blue-800 rounded font-semibold text-sm mb-1">
+                {getPositionName(props.player?.PLYR_POSITION || "")}
+              </div>
+              <div class="px-2 py-1 bg-green-100 text-green-800 rounded font-semibold text-sm">
+                OVR {props.player?.PLYR_OVERALLRATING}
+              </div>
             </div>
-            <div class="px-2 py-1 bg-green-100 text-green-800 rounded font-semibold text-sm">
-              OVR {props.player?.PLYR_OVERALLRATING}
-            </div>
+            {thumbUrl() ? (
+              <img
+                src={thumbUrl()}
+                alt="Player portrait"
+                class="w-36 h-36 rounded-full ml-2 object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "https://cdn.mcr.ea.com/58/files/tu1_d7bcf014_Placeholder_0_P_T0000_D_0_0/1720981070-imagepng-head_thumbnail.png"; // Fallback image
+                }}
+              />
+            ) : (
+              <div class="w-16 h-16 rounded-full ml-2 bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500">No img</span>
+              </div>
+            )}
           </div>
         </div>
 
