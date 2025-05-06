@@ -29,16 +29,6 @@ export const attributeGroups: Record<string, AttributeDefinition[]> = {
       { key: 'PLYR_TOUGHNESS', label: 'Toughness' },
     ],
 
-
-    ratings: [
-      { key: 'PLYR_OVERALLRATING', label: 'Overall Rating' },
-      { key: 'PLYR_SPEED', label: 'Speed' },
-      { key: 'PLYR_ACCELERATION', label: 'Acceleration' },
-      { key: 'PLYR_AGILITY', label: 'Agility' },
-      { key: 'PLYR_STRENGTH', label: 'Strength' },
-      { key: 'PLYR_AWARENESS', label: 'Awareness' },
-      { key: "PLYR_CHANGEOFDIRECTION", label: "Change of Direction" },
-    ],
     receivingSkills: [
       { key: 'PLYR_CATCHING', label: 'Catching' },
         { key: 'PLYR_CATCHINTRAFFIC', label: 'Catching in Traffic' },
