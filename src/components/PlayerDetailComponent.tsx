@@ -4,7 +4,10 @@ import { getPositionName, formatDevTrait, formatHeight } from '../lib/utils';
 
 interface PlayerDetailProps {
   player: PlayerData & { id: string } | null;
+  editable?: boolean;
+  onFieldChange?: (field: string, newValue: string) => void;
 }
+
 
 const PlayerDetailComponent = (props: PlayerDetailProps) => {
   const [activeTab, setActiveTab] = createSignal<string>('general');
@@ -129,18 +132,24 @@ const PlayerDetailComponent = (props: PlayerDetailProps) => {
 
         {/* Tab Content */}
         <div class="grid grid-cols-2 gap-x-8 gap-y-2">
-          <For each={attributeGroups[activeTab()] || []}>
-            {(attribute) => {
-            
-              const value = props.player ? (props.player as any)[attribute.key] : undefined;
-              const displayValue = attribute.format 
-                ? attribute.format(value as string) 
-                : value;
-                
+          <For each={attributeGroups[activeTab()]}>
+            {attr => {
+              const raw = props.player ? (props.player as any)[attr.key] : "";
+              const display = attr.format?.(raw) ?? raw;
               return (
-                <div class="flex justify-between py-1 border-b border-gray-100">
-                  <span class="text-gray-600">{attribute.label}:</span>
-                  <span class="font-medium">{displayValue || 'N/A'}</span>
+                <div class="flex justify-between py-1 border-b" data-key={attr.key}>
+                  <span class="text-gray-600">{attr.label}:</span>
+                  {props.editable && props.onFieldChange ? (
+                    <input
+                      class="border rounded px-1"
+                      value={raw}
+                      onInput={e =>
+                        props.onFieldChange!(attr.key, e.currentTarget.value)
+                      }
+                    />
+                  ) : (
+                    <span class="font-medium">{display || "N/A"}</span>
+                  )}
                 </div>
               );
             }}
