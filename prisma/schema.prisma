@@ -29,6 +29,15 @@ model Roster{
   user     User   @relation(fields: [userId], references: [id])
 }
 
+
+model portrait{
+  id       String @id @default(uuid())
+  genericid       String 
+  recipe String
+  complexionId String
+  imagelink     String
+  thumbnaillink String
+}
 model Equipment{
   id       String @id @default(uuid())
   name     String
@@ -43,3 +52,4 @@ model InitRoster{
   dataRoster     Json
   dataVisual    Json
 }
+
