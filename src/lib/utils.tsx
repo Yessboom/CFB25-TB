@@ -54,3 +54,13 @@ export function formatDevTrait(traitCode: string | undefined): string {
     
     return traits[traitCode] || traitCode;
   }
+
+  //Helper function to format weight
+export function formatWeight(weight: string | undefined): string {
+    if (!weight) return "N/A";
+    const weightNum = parseInt(weight, 10);
+    if (isNaN(weightNum)) return weight;
+    
+    const kg = Math.round(weightNum * 0.453592);
+    return `${kg} kg`;
+  }
