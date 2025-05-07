@@ -3,6 +3,7 @@ import type { PlayerData, AttributeDefinition } from "../types";
 import { getPositionName, formatDevTrait, formatHeight, formatWeight } from "../lib/utils";
 import { attributeGroups } from "~/lib/attributeGroups";
 import { getPortraitThumbnail } from "~/lib/rosterApi";
+import { calculateOverall, getOverallDifference } from "~/lib/overallCalculator";
 
 interface PlayerDetailProps {
   player: PlayerData & { id: string } | null;
@@ -58,6 +59,10 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
   const attributeList = createMemo<AttributeDefinition[]>(
     () => attributeGroups[selectedSubGroup()] || []
   );
+
+    // Calculate overall rating and difference
+  const calculatedOverall = createMemo(() => calculateOverall(props.player));
+  const overallDiff = createMemo(() => getOverallDifference(props.player));
 
   return (
     <Show when={props.player}>
@@ -121,6 +126,14 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
               <div class="px-2 py-1 bg-green-100 text-green-800 rounded font-semibold text-sm">
                 OVR {props.player?.PLYR_OVERALLRATING}
               </div>
+              <div class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded font-semibold text-sm flex items-center">
+                  <span>Calc OVR {calculatedOverall()}</span>
+                  <Show when={overallDiff() !== 0}>
+                    <span class={`ml-1 ${overallDiff() > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      ({overallDiff() > 0 ? '+' : ''}{overallDiff()})
+                    </span>
+                  </Show>
+                </div>
             </div>
             {thumbUrl() ? (
               <img
