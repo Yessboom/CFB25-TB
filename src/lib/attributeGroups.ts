@@ -24,9 +24,12 @@ export const attributeGroups: Record<string, AttributeDefinition[]> = {
       { key: 'PLYR_STRENGTH', label: 'Strength' },
       { key: 'PLYR_AWARENESS', label: 'Awareness' },
       { key: 'PLYR_JUMPING', label: 'Jumping' },
+      { key: "PLYR_CHANGEOFDIRECTION", label: "Change of Direction" },
+      
       { key: 'PLYR_INJURY', label: 'Injury' },
       { key: 'PLYR_STAMINA', label: 'Stamina' },
       { key: 'PLYR_TOUGHNESS', label: 'Toughness' },
+
     ],
 
     receivingSkills: [
@@ -161,14 +164,9 @@ export const attributeGroups: Record<string, AttributeDefinition[]> = {
         {key: 'PLYR_ORIGID', label: 'Original ID'},
         {key: 'PLYR_POSITION', label: 'Position'},
 
-
-
-
-
-
     ]
-
 
   };
 
 
+  
