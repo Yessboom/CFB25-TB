@@ -123,6 +123,7 @@ export default function PlayerDetailComponent(props: PlayerDetailProps) {
               <div class="px-2 py-1 bg-blue-100 text-blue-800 rounded font-semibold text-sm mb-1">
                 {getPositionName(props.player?.PLYR_POSITION || "")}
               </div>
+              {/* Initial Overall rating and Calculated ovr rating */}
               <div class="px-2 py-1 bg-green-100 text-green-800 rounded font-semibold text-sm">
                 OVR {props.player?.PLYR_OVERALLRATING}
               </div>
