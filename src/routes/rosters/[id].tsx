@@ -1,9 +1,10 @@
-import { createResource, Index, createEffect, createSignal, onCleanup, createMemo, Show } from "solid-js";
+import { createResource, createEffect, createSignal, onCleanup, createMemo, Show } from "solid-js";
 import { useParams } from "@solidjs/router";
 import { getUserRosterById, updateRoster } from "../../lib/rosterApi";
 import type { PlayerWithId, RosterData } from "../../types";
 import { useAction } from "@solidjs/router";
 import PlayerDetailComponent from "../../components/PlayerDetailComponent";
+import PlayerList from "../../components/PlayerList";
 
 export default function RosterDetailPage() {
   const params = useParams();
@@ -26,7 +27,13 @@ export default function RosterDetailPage() {
 
   // pick one to edit in the detail panel
   const [selectedPlayerId, setSelectedPlayerId] = createSignal<string | null>(null);
-  const selectedPlayer = createMemo< PlayerWithId | null>(() => {
+  
+  // Stable function reference to prevent rendering issues
+  const handleSelectPlayer = (id: string) => {
+    setSelectedPlayerId(id);
+  };
+  
+  const selectedPlayer = createMemo<PlayerWithId | null>(() => {
     const id = selectedPlayerId();
     const data = editedRoster();
     return id && data ? ({ id, ...data[id] } as PlayerWithId) : null;
@@ -46,21 +53,14 @@ export default function RosterDetailPage() {
 
   return (
     <div class="flex space-x-4 p-4">
-      {/* Left column: click to select */}
-      <ul class="w-1/3 space-y-2">
-        <Index each={players()}>
-          {pl => (
-            <li
-              class={`p-2 border rounded cursor-pointer ${
-                selectedPlayerId() === pl().id ? "bg-blue-50" : "hover:bg-gray-50"
-              }`}
-              onClick={() => setSelectedPlayerId(pl().id)}
-            >
-              {pl().PLYR_FIRSTNAME} {pl().PLYR_LASTNAME}
-            </li>
-          )}
-        </Index>
-      </ul>
+      {/* Left column: PlayerList component */}
+      <div class="w-1/3">
+        <PlayerList 
+          players={players()} 
+          selectedPlayerId={selectedPlayerId()} 
+          onSelectPlayer={handleSelectPlayer}
+        />
+      </div>
 
       {/* Right column: edit form */}
       <div class="w-2/3 border p-4 rounded bg-white">
