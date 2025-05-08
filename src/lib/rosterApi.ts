@@ -158,7 +158,8 @@ export const updateRoster = action(async ([id, data]: [string, RosterData]) => {
     });
 
     // Log the updated roster for debugging purposes
-    console.log("Updated roster:", roster);
+    console.log("Updated roster:", roster.dataRoster);
+    console.log("Roster Size in bytes:", Buffer.byteLength(JSON.stringify(roster.dataRoster), 'utf8'));
 
     return roster;
   } catch (error) {
