@@ -186,3 +186,25 @@ export const getPortraitThumbnail = query(
   },
   "portraitThumbnail"
 )
+
+export const updateRosterName = action(
+  async ([id, name]: [string, string]) => {
+    "use server"
+    const session = await getSession()
+    if (!session.data.userId) {
+      throw new Error("Not authenticated")
+    }
+    if (!id) {
+      throw new Error("Roster ID is required")
+    }
+    if (!name) {
+      throw new Error("Roster name is required")
+    }
+    const roster = await PlayerDB.roster.update({
+      where: { id },
+      data: { name },
+    })
+    return roster
+  }
+  , "updateRosterName"
+)
