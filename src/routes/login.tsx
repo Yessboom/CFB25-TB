@@ -4,6 +4,7 @@ import {
 } from "@solidjs/router";
 import { Show, createSignal } from "solid-js";
 import { loginOrRegister } from "../lib/index";
+import { checkAuth } from "./api/auth";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);

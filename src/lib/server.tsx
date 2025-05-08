@@ -1,6 +1,9 @@
 import { useSession } from "vinxi/http";
 import { PlayerDB } from "./PlayerDB";
+import { checkAuth } from "~/routes/api/auth";
 import bcrypt from "bcryptjs";
+import { onMount } from "solid-js";
+import { c } from "vinxi/dist/types/lib/logger";
 
 type SessionData = {
   userId?: string;
