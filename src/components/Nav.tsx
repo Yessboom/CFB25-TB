@@ -1,8 +1,6 @@
 import { useLocation, createAsync, } from "@solidjs/router";
 import { JSXElement, createSignal, Show, onMount, createEffect } from "solid-js";
-import { checkAuth, isLoggedIn, setIsLoggedIn } from "../routes/api/auth";
 import { getUser } from "../lib/index";
-import { createResource } from "solid-js";
 
 type NavLinkProps = {
   href: string;

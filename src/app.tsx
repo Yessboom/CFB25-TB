@@ -5,7 +5,6 @@ import Nav from "~/components/Nav";
 import "./app.css";
 import { getUser } from "./lib/";
 
-const user = createAsync(() => getUser(), { deferStream: true });
 export default function App() {
   return (
     <Router

@@ -1,53 +1,48 @@
-import {
-  useSubmission,
-  type RouteSectionProps
-} from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { type RouteSectionProps } from "@solidjs/router";
 import { loginOrRegister } from "../lib/index";
-import { checkAuth } from "./api/auth";
 
 export default function Login(props: RouteSectionProps) {
-  const loggingIn = useSubmission(loginOrRegister);
-  const [loginType, setLoginType] = createSignal<"login" | "register">("login");
+  // Get the login type from the URL query parameter
+  const loginTypeParam = () => 
+    typeof window !== "undefined" 
+      ? new URL(window.location.href).searchParams.get("loginType") || "login"
+      : "login";
+  
+  // Get any error from URL if present (passed as query param after form submission)
+  const errorMessage = () =>
+    typeof window !== "undefined"
+      ? new URL(window.location.href).searchParams.get("error")
+      : null;
+
+  const isLogin = loginTypeParam() === "login";
 
   return (
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
       <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 class="text-2xl font-bold text-center mb-6">
-          {loginType() === "login" ? "Welcome Back" : "Create Account"}
+          {isLogin ? "Welcome Back" : "Create Account"}
         </h1>
         
-        <form action={loginOrRegister} method="post" class="space-y-6">
+        <form action="/api/auth" method="post" class="space-y-6">
           <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
           
           <div class="bg-gray-50 rounded-md p-3 flex justify-center space-x-6">
-            <label class="inline-flex items-center cursor-pointer">
-              <input 
-                type="radio" 
-                name="loginType" 
-                value="login" 
-                checked={loginType() === "login"} 
-                onChange={() => setLoginType("login")}
-                class="hidden" 
-              />
-              <div class={`py-2 px-4 rounded-md transition-colors ${loginType() === "login" ? "bg-blue-600 text-white" : "text-gray-500"}`}>
-                Login
-              </div>
-            </label>
-            <label class="inline-flex items-center cursor-pointer">
-              <input 
-                type="radio" 
-                name="loginType" 
-                value="register" 
-                checked={loginType() === "register"} 
-                onChange={() => setLoginType("register")}
-                class="hidden" 
-              />
-              <div class={`py-2 px-4 rounded-md transition-colors ${loginType() === "register" ? "bg-blue-600 text-white" : "text-gray-500"}`}>
-                Register
-              </div>
-            </label>
+            <a 
+              href="/login?loginType=login" 
+              class={`py-2 px-4 rounded-md transition-colors ${isLogin ? "bg-blue-600 text-white" : "text-gray-500"}`}
+            >
+              Login
+            </a>
+            <a 
+              href="/login?loginType=register" 
+              class={`py-2 px-4 rounded-md transition-colors ${!isLogin ? "bg-blue-600 text-white" : "text-gray-500"}`}
+            >
+              Register
+            </a>
           </div>
+          
+          {/* Hidden field to store the login type */}
+          <input type="hidden" name="loginType" value={loginTypeParam()} />
           
           <div class="space-y-4">
             <div>
@@ -59,6 +54,7 @@ export default function Login(props: RouteSectionProps) {
                 name="username" 
                 placeholder="Enter your username" 
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                required
               />
             </div>
             
@@ -72,35 +68,30 @@ export default function Login(props: RouteSectionProps) {
                 type="password" 
                 placeholder="Enter your password" 
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                required
               />
             </div>
-            
-
           </div>
           
           <button 
             type="submit" 
             class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
-            {loginType() === "login" ? "Sign In" : "Create Account"}
+            {isLogin ? "Sign In" : "Create Account"}
           </button>
           
-          <Show when={loggingIn.result}>
+          {errorMessage() && (
             <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert" id="error-message">
-              {loggingIn.result!.message}
+              {errorMessage()}
             </div>
-          </Show>
+          )}
           
           <div class="mt-6 text-center text-sm text-gray-500">
-            {loginType() === "login" ? (
+            {isLogin ? (
               <p>
                 Don't have an account?{" "}
                 <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setLoginType("register");
-                  }}
+                  href="/login?loginType=register"
                   class="text-blue-600 hover:underline"
                 >
                   Sign up
@@ -110,11 +101,7 @@ export default function Login(props: RouteSectionProps) {
               <p>
                 Already have an account?{" "}
                 <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setLoginType("login");
-                  }}
+                  href="/login?loginType=login"
                   class="text-blue-600 hover:underline"
                 >
                   Sign in
