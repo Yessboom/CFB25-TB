@@ -1,6 +1,8 @@
-import { useLocation } from "@solidjs/router";
+import { useLocation, createAsync, } from "@solidjs/router";
 import { JSXElement, createSignal, Show, onMount, createEffect } from "solid-js";
 import { checkAuth, isLoggedIn, setIsLoggedIn } from "../routes/api/auth";
+import { getUser } from "../lib/index";
+import { createResource } from "solid-js";
 
 type NavLinkProps = {
   href: string;
@@ -20,16 +22,7 @@ function NavLink(props: NavLinkProps) {
 }
 
 export default function Nav() {
-  const location = useLocation();
-  // initial check
-  onMount(checkAuth);
-
-  // check when we navigate to Home page (which we do on login and logout!)
-  createEffect(() => {
-    if (location.pathname == "/") checkAuth();
-  });
-
-
+  const placeholdr = true
 
   return (
     <nav class="bg-sky-800">
@@ -37,11 +30,11 @@ export default function Nav() {
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
 
-        <Show when={!isLoggedIn()}>
+        <Show when={placeholdr}>
           <NavLink href="/login">Login</NavLink>
         </Show>
 
-        <Show when={isLoggedIn()}>
+        <Show when={placeholdr}>
           <NavLink href="/roster">Roster</NavLink>
           <NavLink href="/initRoster">Init Roster</NavLink>
           <NavLink href="/rosters/myRosters">My Rosters</NavLink>

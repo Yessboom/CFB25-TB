@@ -70,7 +70,7 @@ export default function RosterDetailPage() {
             editable
             onFieldChange={(key, val) => {
               handleInputChange(selectedPlayer()!.id, key as keyof PlayerWithId, val);
-              // schedule auto-save
+
               const prev = saveTimeouts.get(selectedPlayer()!.id);
               if (prev) clearTimeout(prev);
               const tid = window.setTimeout(() => {

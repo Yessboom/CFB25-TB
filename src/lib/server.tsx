@@ -4,6 +4,7 @@ import { checkAuth } from "~/routes/api/auth";
 import bcrypt from "bcryptjs";
 import { onMount } from "solid-js";
 import { c } from "vinxi/dist/types/lib/logger";
+import {query} from "@solidjs/router"
 
 type SessionData = {
   userId?: string;
@@ -61,3 +62,5 @@ export async function getSession() {
     password: process.env.VITE_SESSION_SECRET || '',
   });
 }
+
+

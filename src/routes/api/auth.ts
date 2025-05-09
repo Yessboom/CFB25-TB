@@ -1,3 +1,4 @@
+import { query } from '@solidjs/router'
 import {getSession} from '../../lib/server'
 import { createSignal } from 'solid-js'
 
@@ -15,15 +16,10 @@ export async function GET() {
 
 const [isLoggedIn, setIsLoggedIn] = createSignal(false);
 
-async function checkAuth() {
-    try {
-      // no-store so we always hit the server on client navigations
-      const res = await fetch("/api/auth", { cache: "no-store" });
-      const data = await res.json();
-      setIsLoggedIn(data.isLoggedIn);
-    } catch {
-      setIsLoggedIn(false);
-    }
-  }
-
+const checkAuth = query(async () => {
+    'use server'
+    const session = await getSession()
+    const isLoggedIn = !!session.data.userId
+    return isLoggedIn
+  }, 'checkAuth')
 export {isLoggedIn, checkAuth, setIsLoggedIn}
